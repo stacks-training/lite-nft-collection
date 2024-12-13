@@ -29,10 +29,12 @@
 ;;
 
 ;; login function
-(define-public (login (user-address principal)) 
-    (if (is-none (map-get? users-map user-address))
-        (err ERR_USER_NOT_EXIST)
-        (ok SUCCESS_LOGIN)
+(define-public (login (user-address principal))
+    (let ((user-data (map-get? users-map user-address)))
+            (if (is-none user-data)
+                (err ERR_USER_NOT_EXIST)
+                (ok user-data)
+            )
     )
 )
 
