@@ -18,6 +18,13 @@
 
 ;; data maps
 ;;
+(define-map users-collections-map
+    principal
+    {
+        picture: (string-ascii 256),
+        address: principal
+    }
+)
 
 ;; public functions
 ;;
