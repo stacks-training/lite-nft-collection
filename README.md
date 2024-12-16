@@ -6,7 +6,7 @@ https://book.clarity-lang.org/ch04-01-constants.html
 
 ## auth contract
 
-### Login 
+### 1. Login 
 
 Overview
 The login function is responsible for authenticating a user based on their address. If the user does not exist, it will register the user and return a success message. If the user already exists, it will simply return a success message.
@@ -29,7 +29,7 @@ ok "Login successful": A success message indicating that the login was successfu
 err ERR_USER_ALREADY_EXISTS: An error indicating that the user already exists (this should not occur in normal operation since the existence is checked before registration).
 
 
-### Get user data
+### 2. Get user data
 
 Overview
 The get-user-data function retrieves the data associated with a specific user based on their address. It checks if the user exists in the system and returns the corresponding user data or an error if the user does not exist.
@@ -48,3 +48,50 @@ Returns
 - ok user-data: The user data associated with the provided address, which includes details such as the user's picture and address.
 - Error: If the user does not exist, the function returns:
 - err ERR_USER_NOT_EXIST: An error indicating that the user does not exist in the system.
+
+
+----
+
+## collection contract
+Overview
+The NFT Collection Contract is designed to manage a collection of Non-Fungible Tokens (NFTs) on the Stacks blockchain. This contract allows users to create, store, and retrieve NFTs associated with specific addresses (principals). Each NFT has attributes such as name, logo, and address.
+
+
+### 1. get-collections
+Signature:
+```
+(define-public (get-collections (user-address principal))
+``` 
+Overview:
+The get-collections function retrieves a list of collections associated with a specific user address. This function is useful for displaying all collections owned by a user.
+
+Parameters:
+- user-address (principal): The unique address of the user whose collections are being requested. This is a required parameter.
+
+Returns:
+
+- Success: If the user has collections, the function returns:
+ok <list of collections>: A list of collections associated with the provided user address.
+- Error: If the user does not have any collections, the function returns:
+err "No collections found for this address": An error indicating that no collections are associated with the specified address.
+
+
+### 2. get-nfts-by-collection
+Signature:
+```
+(define-public (get-nfts-by-collection (collection-id uint))
+```
+
+Overview:
+The get-nfts-by-collection function retrieves a list of NFTs that belong to a specific collection identified by its ID. This function is useful for displaying all NFTs within a particular collection.
+
+Parameters:
+
+- collection-id (uint): The unique identifier of the collection for which NFTs are being requested. This is a required parameter.
+
+Returns:
+
+- Success: If the collection exists and contains NFTs, the function returns:
+ok <list of NFTs>: A list of NFTs associated with the specified collection ID.
+- Error: If the collection does not exist or contains no NFTs, the function returns:
+err "No NFTs found for this collection": An error indicating that no NFTs are associated with the specified collection ID.

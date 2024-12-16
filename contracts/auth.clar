@@ -1,5 +1,5 @@
 ;; title: auth
-;; version:
+;; version: 2
 ;; summary:
 ;; description:
 
