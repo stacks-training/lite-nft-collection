@@ -1,6 +1,6 @@
 
 ;; title: collection
-;; version:
+;; version: 1
 ;; summary:
 ;; description:
 
@@ -12,20 +12,22 @@
 
 ;; constants
 ;;
+(define-constant SUCCESS_CREATED_COLLECTION "Collection creation successful")
 
 ;; data vars
 ;;
+(define-data-var global-collection-id uint u0)
 
 ;; data maps
 ;;
-(define-map collections-map
-    principal
-    {
-        name: (string-ascii 256),
-        description: (string-ascii 256),
-        logo: (string-ascii 256)
-    }
-)
+;; (define-map collections-map
+;;     principal
+;;     {
+;;         name: (string-ascii 256),
+;;         description: (string-ascii 256),
+;;         logo: (string-ascii 256)
+;;     }
+;; )
 
 (define-map nfts-map
     principal
@@ -38,10 +40,15 @@
     }
 )
 
-;; (define-map principal-list-map
-;;     principal
-;;     (list (string-ascii 256))
-;; )
+(define-map collections-map
+  { collection-id: uint }
+  {
+    name: (string-ascii 100),
+    description: (string-ascii 256),
+    logo: (string-ascii 256)
+  }
+)
+
 
 ;; public functions
 ;;
@@ -101,6 +108,24 @@
     ))
 )
 
+(define-public (create-collection (name (string-ascii 100)) (description (string-ascii 256)) (logo (string-ascii 256)))
+    (begin
+        (let ((collection-id (+ (var-get global-collection-id) u1))) 
+            ;; insert new collection
+            (map-insert collections-map
+                { collection-id: collection-id }
+                {
+                    name: name,
+                    description: description,
+                    logo: logo
+                }
+            )
+            (var-set global-collection-id collection-id)
+            (ok SUCCESS_CREATED_COLLECTION)
+        )
+    )
+)
+
 ;; (define-public (get-collection-history) body)
 
 ;; (define-public (get-nft-history) body)
@@ -109,6 +134,13 @@
 
 ;; read only functions
 ;;
+(define-read-only (get-collection-id)
+    (ok (var-get global-collection-id))
+)
+
+(define-read-only (get-collection-by-id (id uint))
+    (ok (map-get? collections-map { collection-id: id}))
+)
 
 ;; private functions
 ;;
