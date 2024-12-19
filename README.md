@@ -1,5 +1,8 @@
 https://docs.stacks.co/reference/types#clarity-type-system
 https://book.clarity-lang.org/ch04-01-constants.html
+https://www.clearness.dev/02-clarity-language/01-iterate-on-lists
+https://www.clearness.dev/
+how to unwrap maps
 
 
 # Documentation
