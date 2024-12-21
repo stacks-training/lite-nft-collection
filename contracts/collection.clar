@@ -1,11 +1,8 @@
 
-;; title: collection
+;; title: collection contract
 ;; version: 5
-;; summary:
+;; summary: contract to save collections and NFTs created by user
 ;; description:
-
-;; traits
-;;
 
 ;; token definitions
 ;;
