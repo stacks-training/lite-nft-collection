@@ -1,6 +1,6 @@
 
 ;; title: collection
-;; version: 4
+;; version: 5
 ;; summary:
 ;; description:
 
@@ -22,18 +22,7 @@
 (define-data-var global-collection-id uint u0)
 (define-data-var global-nft-id uint u0)
 
-;;
 
-;; data maps
-;;
-;; (define-map collections-map
-;;     principal
-;;     {
-;;         name: (string-ascii 256),
-;;         description: (string-ascii 256),
-;;         logo: (string-ascii 256)
-;;     }
-;; )
 
 (define-map nfts-map-old
     principal
