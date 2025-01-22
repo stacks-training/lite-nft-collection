@@ -1,10 +1,3 @@
-https://docs.stacks.co/reference/types#clarity-type-system
-https://book.clarity-lang.org/ch04-01-constants.html
-https://www.clearness.dev/02-clarity-language/01-iterate-on-lists
-https://www.clearness.dev/
-how to unwrap maps
-https://www.easya.io/
-
 
 # Documentation
 
@@ -215,3 +208,12 @@ Here’s an example of how to call the get-nfts-by-owner function:
 ```
 (get-nfts-by-owner)
 ```
+
+
+# Sources
+- https://docs.stacks.co/reference/types#clarity-type-system
+- https://book.clarity-lang.org/ch04-01-constants.html
+- https://www.clearness.dev/02-clarity-language/01-iterate-on-lists
+- https://www.clearness.dev/
+- https://www.easya.io/
+

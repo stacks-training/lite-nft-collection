@@ -6,7 +6,7 @@
 
 ;; token definitions
 ;;
-(define-map users uint {name: (string-ascii 50), age: uint})
+(define-map users uint {name: (string-utf8 50), age: uint})
 (define-data-var user-count uint u0)
 
 ;; constants
@@ -29,9 +29,9 @@
   { collection-id: uint }
   {
     id: uint,
-    name: (string-ascii 100),
-    description: (string-ascii 256),
-    logo: (string-ascii 256),
+    name: (string-utf8 100),
+    description: (string-utf8 256),
+    logo: (string-utf8 256),
     owner: principal,
     quantity: uint
   }
@@ -41,9 +41,9 @@
   { nft-id: uint }
   {
     id: uint,
-    name: (string-ascii 100),
-    image: (string-ascii 256),
-    attributes: (string-ascii 256),
+    name: (string-utf8 100),
+    image: (string-utf8 256),
+    attributes: (string-utf8 256),
     price: uint,
     owner: principal,
     collection-id: uint
@@ -54,9 +54,9 @@
 ;;
 (define-private (collection-owner-validation (collection {
     id: uint,
-    name: (string-ascii 100),
-    description: (string-ascii 256),
-    logo: (string-ascii 256),
+    name: (string-utf8 100),
+    description: (string-utf8 256),
+    logo: (string-utf8 256),
     owner: principal,
     quantity: uint
   }))
@@ -65,9 +65,9 @@
 
 (define-private (nft-owner-validation (nft {
     id: uint,
-    name: (string-ascii 100),
-    image: (string-ascii 256),
-    attributes: (string-ascii 256),
+    name: (string-utf8 100),
+    image: (string-utf8 256),
+    attributes: (string-utf8 256),
     price: uint,
     owner: principal,
     collection-id: uint
@@ -94,10 +94,10 @@
 ;; PUBLIC FUNCTIONS
 
 ;; create a new collection
-(define-public (create-collection (name (string-ascii 100)) (description (string-ascii 256)) (logo (string-ascii 256)))
+(define-public (create-collection (name (string-utf8 100)) (description (string-utf8 256)) (logo (string-utf8 256)))
     (begin
         ;; validate name, description and logo are not empty
-        (if (or (is-eq name "") (is-eq description "") (is-eq logo ""))
+        (if (or (is-eq name u"") (is-eq description u"") (is-eq logo u""))
             (err ERROR_EMPTY_FIELDS)
             (let ((collection-id (+ (var-get global-collection-id) u1))) 
                 ;; insert new collection
@@ -132,27 +132,30 @@
     (print (filter collection-owner-validation (get-all-collections)))
 )
 
-(define-public (create-nft (name (string-ascii 100)) (attributes (string-ascii 256)) (image (string-ascii 256)) (collection-id uint))
+(define-public (create-nft (name (string-utf8 100)) (attributes (string-utf8 256)) (image (string-utf8 256)) (collection-id uint))
     (begin
-        (let ((nft-id (+ (var-get global-nft-id) u1))) 
-            ;; insert new nft
-            (map-insert nfts-map
-                { nft-id: nft-id }
-                {
-                    id: nft-id,
-                    name: name,
-                    image: image,
-                    attributes: attributes,
-                    price: u0,
-                    owner: tx-sender,
-                    collection-id: collection-id
-                }
+        (if (or (is-eq name u"") (is-eq attributes u"") (is-eq image u"") (is-eq collection-id u0))
+            (err ERROR_EMPTY_FIELDS)
+            (let ((nft-id (+ (var-get global-nft-id) u1))) 
+                ;; insert new nft
+                (map-insert nfts-map
+                    { nft-id: nft-id }
+                    {
+                        id: nft-id,
+                        name: name,
+                        image: image,
+                        attributes: attributes,
+                        price: u0,
+                        owner: tx-sender,
+                        collection-id: collection-id
+                    }
+                )
+                ;; update nft id list
+                (unwrap! (push-nft-item nft-id) (err ERROR_EMPTY_VALUE))
+                ;; update global id for collections
+                (var-set global-nft-id nft-id)
+                (ok SUCCESS_CREATED_NFT)
             )
-            ;; update nft id list
-            (unwrap! (push-nft-item nft-id) (err ERROR_EMPTY_VALUE))
-            ;; update global id for collections
-            (var-set global-nft-id nft-id)
-            (ok SUCCESS_CREATED_NFT)
         )
     )
 )
