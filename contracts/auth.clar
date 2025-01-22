@@ -26,7 +26,7 @@
     }
 )
 
-;; public functions
+;; PUBLIC & READ ONLY FUNCTIONS
 ;;
 
 ;; login function
@@ -44,9 +44,6 @@
     )
 )
 
-;; read only functions
-;;
-
 ;; retrieve basic user data
 (define-read-only (get-user-data (user-address principal))
     (let ((user-data (map-get? users-map user-address)))
@@ -57,7 +54,7 @@
     )
 )
 
-;; private functions
+;; PRIVATE FUNCTIONS
 ;;
 
 ;; register function

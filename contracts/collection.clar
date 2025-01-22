@@ -14,6 +14,7 @@
 (define-constant SUCCESS_CREATED_COLLECTION "Collection creation successful")
 (define-constant SUCCESS_CREATED_NFT "NFT creation successful")
 (define-constant ERROR_EMPTY_VALUE "Empty value is invalid")
+(define-constant ERROR_EMPTY_FIELDS "Fields cannot be empty")
 
 ;; data vars
 ;;
@@ -95,24 +96,28 @@
 ;; create a new collection
 (define-public (create-collection (name (string-ascii 100)) (description (string-ascii 256)) (logo (string-ascii 256)))
     (begin
-        (let ((collection-id (+ (var-get global-collection-id) u1))) 
-            ;; insert new collection
-            (map-insert collections-map
-                { collection-id: collection-id }
-                {
-                    id: collection-id,
-                    name: name,
-                    description: description,
-                    logo: logo,
-                    owner: tx-sender,
-                    quantity: u0
-                }
+        ;; validate name, description and logo are not empty
+        (if (or (is-eq name "") (is-eq description "") (is-eq logo ""))
+            (err ERROR_EMPTY_FIELDS)
+            (let ((collection-id (+ (var-get global-collection-id) u1))) 
+                ;; insert new collection
+                (map-insert collections-map
+                    { collection-id: collection-id }
+                    {
+                        id: collection-id,
+                        name: name,
+                        description: description,
+                        logo: logo,
+                        owner: tx-sender,
+                        quantity: u0
+                    }
+                )
+                ;; update collection id list
+                (unwrap! (push-item collection-id) (err ERROR_EMPTY_VALUE))
+                ;; update global id for collections
+                (var-set global-collection-id collection-id)
+                (ok SUCCESS_CREATED_COLLECTION)
             )
-            ;; update collection id list
-            (unwrap! (push-item collection-id) (err ERROR_EMPTY_VALUE))
-            ;; update global id for collections
-            (var-set global-collection-id collection-id)
-            (ok SUCCESS_CREATED_COLLECTION)
         )
     )
 )
