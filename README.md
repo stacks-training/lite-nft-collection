@@ -217,3 +217,8 @@ Here’s an example of how to call the get-nfts-by-owner function:
 - https://www.clearness.dev/
 - https://www.easya.io/
 
+
+# Commands for deployment
+
+clarinet deployments generate --<network>
+clarinet deployments apply --<network>
